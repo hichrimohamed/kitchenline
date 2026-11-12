@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/industry-2307b153-26f9-4ca6-81df-c1375b2e9675/styles.css">
+<script src="_ds/industry-2307b153-26f9-4ca6-81df-c1375b2e9675/_ds_bundle.js"></script>
+<style>
+body{margin:0;--color-bg:#EEE5D4;--color-surface:color-mix(in srgb,#1D4A35 8%,#EEE5D4);--color-text:#1D4A35;--color-divider:color-mix(in srgb,#1D4A35 28%,transparent);
+--color-neutral-100:#EEE5D4;--color-neutral-200:color-mix(in srgb,#1D4A35 10%,#EEE5D4);--color-neutral-300:color-mix(in srgb,#1D4A35 20%,#EEE5D4);--color-neutral-400:color-mix(in srgb,#1D4A35 35%,#EEE5D4);--color-neutral-500:color-mix(in srgb,#1D4A35 50%,#EEE5D4);--color-neutral-600:color-mix(in srgb,#1D4A35 65%,#EEE5D4);--color-neutral-700:color-mix(in srgb,#1D4A35 80%,#EEE5D4);--color-neutral-800:color-mix(in srgb,#1D4A35 90%,#EEE5D4);--color-neutral-900:#1D4A35;
+--color-accent:#f2462e;--color-accent-100:color-mix(in srgb,#f2462e 14%,#EEE5D4);--color-accent-200:color-mix(in srgb,#f2462e 26%,#EEE5D4);--color-accent-300:color-mix(in srgb,#f2462e 42%,#EEE5D4);--color-accent-400:color-mix(in srgb,#f2462e 70%,#EEE5D4);--color-accent-500:#f2462e;--color-accent-600:color-mix(in srgb,#f2462e 86%,#1D4A35);--color-accent-700:color-mix(in srgb,#f2462e 72%,#1D4A35);--color-accent-800:#1D4A35;--color-accent-900:#1D4A35}
+[data-field]{background:#1D4A35;color:#EEE5D4;--color-text:#EEE5D4;--color-divider:color-mix(in srgb,#EEE5D4 30%,transparent)}
+a{color:#1D4A35}
+a:hover{color:#f2462e}
+@keyframes kl-drop{from{transform:translateY(-130%) rotate(-9deg);opacity:0}to{opacity:1}}
+</style>
+</helmet>
+<div style="min-height:100vh;display:flex;flex-direction:column;background:var(--color-bg);color:var(--color-text);font-family:var(--font-body)">
+
+<header class="nav" style="flex-wrap:wrap;gap:var(--space-3) var(--space-4)">
+  <span class="nav-brand" style="margin-right:0">Kitchenline</span>
+  <select class="input" style="width:auto;min-width:140px" value="{{ location }}" onChange="{{ setLocation }}">
+    <option>Downtown</option><option>Harbor</option><option>Uptown</option>
+  </select>
+  <div class="seg" role="radiogroup" aria-label="Service">
+    <label class="seg-opt"><input type="radio" name="service" checked="{{ isLunch }}" onChange="{{ setLunch }}"><span>{{ tx.lunch }} 12:00–15:00</span></label>
+    <label class="seg-opt"><input type="radio" name="service" checked="{{ isDinner }}" onChange="{{ setDinner }}"><span>{{ tx.dinner }} 19:00 · 62 {{ tx.booked }}</span></label>
+  </div>
+  <div class="seg" role="radiogroup" aria-label="Language">
+    <label class="seg-opt"><input type="radio" name="lang" checked="{{ isEn }}" onChange="{{ setEn }}"><span>EN</span></label>
+    <label class="seg-opt"><input type="radio" name="lang" checked="{{ isEs }}" onChange="{{ setEs }}"><span>ES</span></label>
+  </div>
+  <div style="margin-left:auto;display:flex;align-items:baseline;gap:var(--space-4)">
+    <span class="text-muted" style="font-size:12px;letter-spacing:.08em;text-transform:uppercase">{{ tx.coversSoFar }}</span>
+    <span style="font-family:var(--font-heading);font-weight:600;font-size:20px">{{ coversSoFar }}</span>
+    <span style="font-family:var(--font-heading);font-weight:600;font-size:20px">{{ clock }}</span>
+  </div>
+</header>
+
+<main style="flex:1 1 auto;padding:var(--space-4) var(--space-6) var(--space-8)">
+
+  <!-- 01 PASS -->
+  <div data-screen-label="01 Pass" style="display:{{ dPass }};flex-direction:column;gap:var(--space-8)">
+    <div class="blueprint" data-field="" style="padding:var(--space-4)">
+      <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+      <div style="display:flex;flex-wrap:wrap;gap:var(--space-6) var(--space-4)">
+        <sc-for list="{{ zones }}" as="z" hint-placeholder-count="4">
+          <div style="flex:{{ z.flex }};min-width:min(100%,{{ z.minW }});max-width:100%">
+            <div style="display:flex;align-items:baseline;gap:var(--space-2);padding-bottom:var(--space-2)">
+              <span style="font-family:var(--font-heading);font-weight:600;font-size:16px;letter-spacing:.08em;text-transform:uppercase">{{ z.name }}</span>
+              <span class="text-muted" style="font-size:12px">{{ z.meta }}</span>
+              <span class="tag tag-accent" style="display:{{ z.lateDisplay }};margin-left:auto;gap:4px"><span>{{ z.lateCount }}</span><span>{{ tx.late }}</span></span>
+            </div>
+            <div style="border-top:2px solid var(--color-text);display:flex;gap:var(--space-4);min-height:176px;align-items:flex-start;overflow-x:auto;scrollbar-width:thin;scrollbar-color:var(--color-divider) transparent;padding:0 6px 14px">
+              <sc-for list="{{ z.tickets }}" as="k" hint-placeholder-count="3">
+                <button type="button" onClick="{{ k.select }}" style="all:unset;box-sizing:border-box;cursor:pointer;flex:none;width:112px;display:flex;flex-direction:column;gap:5px;padding:0 8px 8px;background:{{ k.bg }};color:{{ k.fg }};border:{{ k.border }};border-top:0;outline:{{ k.outline }};outline-offset:3px;transform:{{ k.rot }};transform-origin:top center;animation:{{ k.anim }};box-shadow:var(--shadow-md)">
+                  <span style="display:block;width:16px;height:7px;margin:0 auto;background:var(--color-accent)"></span>
+                  <span style="display:flex;justify-content:space-between;align-items:baseline">
+                    <span style="font-family:var(--font-heading);font-weight:600;font-size:26px;line-height:1">{{ k.table }}</span>
+                    <span style="font-size:11px">{{ k.covers }} {{ tx.cov }}</span>
+                  </span>
+                  <span style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;border-bottom:1px dashed currentColor;padding-bottom:3px">{{ k.course }}</span>
+                  <span style="display:flex;flex-direction:column;gap:1px;font:11px/1.35 ui-monospace,Menlo,monospace;min-height:48px">
+                    <sc-for list="{{ k.items }}" as="it" hint-placeholder-count="2"><span>{{ it }}</span></sc-for>
+                  </span>
+                  <span style="display:flex;justify-content:space-between;align-items:center;gap:4px;padding:2px 5px;margin:0 -5px;background:{{ k.timerBg }};color:{{ k.timerFg }}">
+                    <span style="font-family:var(--font-heading);font-weight:600;font-size:18px">{{ k.timer }}</span>
+                    <span style="display:{{ k.lateDisplay }};font-size:11px;font-weight:700;letter-spacing:.1em">{{ tx.lateUpper }}</span>
+                  </span>
+                </button>
+              </sc-for>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:var(--space-8) var(--space-6)">
+      <div style="display:flex;flex-direction:column;gap:var(--space-4)">
+        <div><div class="card-kicker" style="color:var(--color-text);opacity:.75">{{ tx.onPass }}</div><div style="font-family:var(--font-heading);font-weight:600;font-size:42px;line-height:1.1">{{ onPass }}</div><div class="card-meta" style="gap:4px"><span>{{ lateTotal }}</span><span>{{ tx.lateOldest }}</span><span>{{ oldest }}</span></div></div>
+        <div><div class="card-kicker" style="color:var(--color-text);opacity:.75">{{ tx.avgTicket }}</div><div style="font-family:var(--font-heading);font-weight:600;font-size:42px;line-height:1.1">{{ avgAll }}</div><div class="card-meta" style="gap:4px"><span>{{ done }}</span><span>{{ tx.doneTarget }}</span><span>{{ targetLabel }}</span></div></div>
+      </div>
+
+      <div class="card blueprint" style="padding:var(--space-4);gap:var(--space-3)">
+        <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+        <div style="display:flex;flex-wrap:wrap;align-items:baseline;gap:0 var(--space-2)"><span class="card-title">{{ tx.fireNext }}</span><span class="text-muted" style="font-size:12px;white-space:nowrap">{{ queueCount }} {{ tx.waiting }}</span></div>
+        <sc-for list="{{ queue }}" as="q" hint-placeholder-count="4">
+          <div style="display:flex;align-items:center;gap:var(--space-3);padding:var(--space-2) 0;border-top:1px solid var(--color-divider)">
+            <span style="font-family:var(--font-heading);font-weight:600;font-size:18px;width:34px;flex:none">{{ q.table }}</span>
+            <div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:500">{{ q.head }}</div><div class="text-muted" style="font-size:12px">{{ q.line }}</div></div>
+            <button type="button" class="btn btn-primary blueprint" style="flex:none" onClick="{{ q.fire }}"><i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>{{ tx.fire }}</button>
+          </div>
+        </sc-for>
+        <sc-if value="{{ queueEmpty }}" hint-placeholder-val="{{ false }}"><div class="text-muted" style="font-size:13px">{{ tx.noQueue }}</div></sc-if>
+      </div>
+
+      <div class="card blueprint" style="padding:var(--space-4);gap:var(--space-3)">
+        <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+        <div style="display:flex;flex-wrap:wrap;align-items:baseline;gap:0 var(--space-2)"><span class="card-title">{{ tx.stations }}</span><span class="text-muted" style="font-size:12px;white-space:nowrap">{{ tx.oldestVs }} {{ targetLabel }}</span></div>
+        <sc-for list="{{ zones }}" as="z" hint-placeholder-count="4">
+          <div style="display:grid;grid-template-columns:56px 1fr 44px 28px;align-items:center;gap:var(--space-3);padding:var(--space-2) 0;border-top:1px solid var(--color-divider);font-size:13px">
+            <span style="font-weight:500">{{ z.name }}</span>
+            <div style="height:6px;border:1px solid var(--color-divider)"><div style="height:100%;width:{{ z.loadPct }};background:{{ z.barBg }}"></div></div>
+            <span style="text-align:right;font-family:var(--font-heading);font-weight:600;font-size:16px">{{ z.oldest }}</span>
+            <span class="text-muted" style="text-align:right">{{ z.on }}</span>
+          </div>
+        </sc-for>
+      </div>
+
+      <div class="card blueprint" style="padding:var(--space-4);gap:var(--space-3)">
+        <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+        <sc-if value="{{ hasSel }}" hint-placeholder-val="{{ true }}">
+          <div style="display:flex;justify-content:space-between;align-items:baseline">
+            <div><div class="card-kicker" style="color:var(--color-text);opacity:.75">{{ selK.stationL }} · {{ selK.course }} · {{ selK.covers }} {{ tx.coversLower }}</div><div style="font-family:var(--font-heading);font-weight:600;font-size:32px;line-height:1.1">{{ selK.table }}</div></div>
+            <span style="font-family:var(--font-heading);font-weight:600;font-size:26px">{{ selK.timer }}</span>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:2px;font:13px/1.45 ui-monospace,Menlo,monospace;flex:1">
+            <sc-for list="{{ selK.items }}" as="it" hint-placeholder-count="3"><span>{{ it }}</span></sc-for>
+          </div>
+          <div style="display:flex;gap:var(--space-3);flex-wrap:wrap;padding-top:var(--space-2)">
+            <button type="button" class="btn btn-primary blueprint" onClick="{{ bump }}"><i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>{{ tx.bump }}</button>
+            <button type="button" class="btn btn-secondary" onClick="{{ refire }}">{{ tx.refire }}</button>
+          </div>
+        </sc-if>
+        <sc-if value="{{ noSel }}" hint-placeholder-val="{{ false }}"><div class="text-muted" style="font-size:13px">{{ tx.railClear }}</div></sc-if>
+      </div>
+    </div>
+  </div>
+
+  <!-- 02 FLOOR -->
+  <div data-screen-label="02 Floor" style="display:{{ dFloor }};flex-wrap:wrap;gap:var(--space-8) var(--space-6)">
+    <div style="flex:3 1 480px;min-width:0;display:flex;flex-direction:column;gap:var(--space-4)">
+      <div style="display:flex;flex-wrap:wrap;gap:var(--space-2)">
+        <sc-for list="{{ filters }}" as="f" hint-placeholder-count="5">
+          <button type="button" class="btn" onClick="{{ f.set }}" style="gap:6px;background:{{ f.bg }};color:{{ f.fg }}"><span>{{ f.label }}</span><span>{{ f.count }}</span></button>
+        </sc-for>
+      </div>
+      <div class="blueprint" data-field="" style="aspect-ratio:16/10;min-height:300px">
+        <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+        <div style="position:absolute;left:62%;top:0;width:24%;height:7%;border:1px solid var(--color-divider);border-top:0;display:flex;align-items:center;justify-content:center;font-size:10px;letter-spacing:.12em" class="text-muted">{{ tx.kitchen }}</div>
+        <div style="position:absolute;left:89%;top:14%;width:5%;height:50%;border:1px solid var(--color-divider);display:flex;align-items:center;justify-content:center;font-size:10px;letter-spacing:.12em;writing-mode:vertical-rl" class="text-muted">{{ tx.bar }}</div>
+        <div style="position:absolute;left:3%;bottom:2%;font-size:10px;letter-spacing:.12em" class="text-muted">{{ tx.entrance }}</div>
+        <sc-for list="{{ tables }}" as="t" hint-placeholder-count="8">
+          <button type="button" onClick="{{ t.select }}" style="all:unset;box-sizing:border-box;cursor:pointer;position:absolute;left:{{ t.l }};top:{{ t.t }};width:{{ t.w }};height:{{ t.h }};display:flex;flex-direction:column;align-items:center;justify-content:center;background:{{ t.bg }};color:{{ t.fg }};border:{{ t.border }};border-radius:{{ t.radius }};opacity:{{ t.opacity }};outline:{{ t.outline }};outline-offset:7px;box-shadow:{{ t.ring }};transition:opacity .2s">
+            <span style="font-family:var(--font-heading);font-weight:600;font-size:16px;line-height:1">{{ t.num }}</span>
+            <span style="display:{{ t.subDisplay }};font-size:10px;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap;max-width:100%;overflow:hidden;text-overflow:ellipsis;padding:0 4px;box-sizing:border-box">{{ t.sub }}</span>
+            <sc-for list="{{ t.seatPips }}" as="p" hint-placeholder-count="2"><span style="position:absolute;left:{{ p.l }};top:{{ p.t }};width:8px;height:8px;margin:-4px 0 0 -4px;border:1px solid var(--color-neutral-100);border-radius:50%;background:{{ p.bg }}"></span></sc-for>
+          </button>
+        </sc-for>
+      </div>
+    </div>
+
+    <div style="flex:1 1 280px;min-width:0;display:flex;flex-direction:column;gap:var(--space-6)">
+      <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--space-3)">
+        <div><div class="card-kicker" style="color:var(--color-text);opacity:.75">{{ tx.coversSeated }}</div><div style="font-family:var(--font-heading);font-weight:600;font-size:34px;line-height:1.1">{{ coversSeated }}</div></div>
+        <div><div class="card-kicker" style="color:var(--color-text);opacity:.75">{{ tx.tablesInUse }}</div><div style="font-family:var(--font-heading);font-weight:600;font-size:34px;line-height:1.1">{{ inUse }}</div></div>
+        <div><div class="card-kicker" style="color:var(--color-text);opacity:.75">{{ tx.avgTurn }}</div><div style="font-family:var(--font-heading);font-weight:600;font-size:34px;line-height:1.1">0:58</div></div>
+      </div>
+      <div class="card blueprint" style="padding:var(--space-4);gap:var(--space-3)">
+        <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+        <div style="display:flex;align-items:center;gap:var(--space-3)"><span style="font-family:var(--font-heading);font-weight:600;font-size:26px">{{ tx.table }} {{ selT.num }}</span><span class="tag {{ selT.tagClass }}">{{ selT.status }}</span><span class="text-muted" style="font-size:12px;margin-left:auto">{{ selT.seats }} {{ tx.seats }}</span></div>
+        <div style="display:grid;grid-template-columns:auto 1fr;gap:5px var(--space-4);font-size:13px">
+          <span class="text-muted">{{ tx.covers }}</span><span>{{ selT.coversLabel }}</span>
+          <span class="text-muted">{{ tx.course }}</span><span>{{ selT.courseLabel }}</span>
+          <span class="text-muted">{{ tx.check }}</span><span>{{ selT.check }}</span>
+        </div>
+        <button type="button" class="btn btn-primary btn-block blueprint" onClick="{{ advanceTable }}"><i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>{{ selT.action }}</button>
+      </div>
+      <div>
+        <div style="display:flex;align-items:baseline;gap:var(--space-2);margin-bottom:var(--space-2)"><span class="card-title">{{ tx.stillToCome }}</span><span class="text-muted" style="font-size:12px">{{ bookingCovers }} {{ tx.coversLower }}</span></div>
+        <sc-for list="{{ bookings }}" as="b" hint-placeholder-count="3">
+          <div style="display:flex;align-items:center;gap:var(--space-3);padding:var(--space-2) 0;border-top:1px solid var(--color-divider);font-size:13px">
+            <span style="font-family:var(--font-heading);font-weight:600;font-size:16px;width:44px;flex:none">{{ b.time }}</span>
+            <span style="flex:1;min-width:0">{{ b.name }} · {{ b.party }}</span>
+            <span class="text-muted">{{ b.table }}</span>
+            <button type="button" class="btn btn-secondary" onClick="{{ b.seat }}">{{ tx.seat }}</button>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </div>
+
+  <!-- 03 MENU -->
+  <div data-screen-label="03 Menu" style="display:{{ dMenu }};flex-direction:column;gap:var(--space-8)">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:var(--space-4)">
+      <div><div class="card-kicker" style="color:var(--color-text);opacity:.75">{{ tx.onMenu }}</div><div style="font-family:var(--font-heading);font-weight:600;font-size:42px;line-height:1.1">{{ menuOn }}</div><div class="card-meta" style="gap:4px"><span>{{ tx.of }}</span><span>{{ menuTotal }}</span><span>{{ tx.dishes }}</span></div></div>
+      <div><div class="card-kicker" style="color:var(--color-text);opacity:.75">{{ tx.eightySixed }}</div><div style="font-family:var(--font-heading);font-weight:600;font-size:42px;line-height:1.1">{{ menuOff }}</div><div class="card-meta">{{ menuOffNames }}</div></div>
+      <div><div class="card-kicker" style="color:var(--color-text);opacity:.75">{{ tx.runningLow }}</div><div style="font-family:var(--font-heading);font-weight:600;font-size:42px;line-height:1.1">{{ menuLow }}</div><div class="card-meta">{{ menuLowNames }}</div></div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:var(--space-8) var(--space-6)">
+      <sc-for list="{{ menuGroups }}" as="g" hint-placeholder-count="3">
+        <div class="card blueprint" style="padding:var(--space-4);gap:0">
+          <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+          <div style="display:flex;align-items:baseline;gap:var(--space-2);padding-bottom:var(--space-2)"><span class="card-title">{{ g.name }}</span><span class="text-muted" style="font-size:12px;display:flex;gap:4px"><span>{{ g.left }}</span><span>{{ tx.portionsLeft }}</span></span></div>
+          <sc-for list="{{ g.items }}" as="m" hint-placeholder-count="5">
+            <div style="display:grid;grid-template-columns:minmax(0,1fr) 36px 64px auto;align-items:center;gap:var(--space-3);padding:var(--space-2) 0;border-top:1px solid var(--color-divider)">
+              <div style="min-width:0;opacity:{{ m.dim }}"><div style="font-size:14px;font-weight:500;text-decoration:{{ m.deco }}">{{ m.label }}</div><div class="text-muted" style="font-size:11px;letter-spacing:.06em;text-transform:uppercase">{{ m.meta }}</div></div>
+              <div style="text-align:right">
+                <span style="display:{{ m.numDisplay }};font-family:var(--font-heading);font-weight:600;font-size:22px">{{ m.left }}</span>
+                <span class="tag tag-accent" style="display:{{ m.offDisplay }}">86</span>
+              </div>
+              <div><div style="height:5px;border:1px solid var(--color-divider)"><div style="height:100%;width:{{ m.pct }};background:var(--color-text)"></div></div><div class="text-muted" style="font-size:11px;margin-top:2px">{{ m.sold }} {{ tx.sold }}</div></div>
+              <div style="display:flex;gap:var(--space-1)">
+                <button type="button" class="btn btn-secondary" disabled="{{ m.off }}" onClick="{{ m.sell }}" aria-label="Sell one">−1</button>
+                <button type="button" class="btn btn-secondary" onClick="{{ m.toggle }}" style="min-width:46px">{{ m.toggleLabel }}</button>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+
+  <!-- 04 SALES -->
+  <div data-screen-label="04 Sales" style="display:{{ dSales }};flex-direction:column;gap:var(--space-8)">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:var(--space-4)">
+      <div><div class="card-kicker" style="color:var(--color-text);opacity:.75">{{ tx.covers }}</div><div style="font-family:var(--font-heading);font-weight:600;font-size:42px;line-height:1.1">96</div><div class="card-meta">{{ tx.checks41 }}</div></div>
+      <div><div class="card-kicker" style="color:var(--color-text);opacity:.75">{{ tx.grossSales }}</div><div style="font-family:var(--font-heading);font-weight:600;font-size:42px;line-height:1.1">$3,264.00</div><div class="card-meta">{{ tx.netLine }}</div></div>
+      <div><div class="card-kicker" style="color:var(--color-text);opacity:.75">{{ tx.perCover }}</div><div style="font-family:var(--font-heading);font-weight:600;font-size:42px;line-height:1.1">$34.00</div><div class="card-meta">{{ tx.perCheck }}</div></div>
+      <div><div class="card-kicker" style="color:var(--color-text);opacity:.75">{{ tx.tips }}</div><div style="font-family:var(--font-heading);font-weight:600;font-size:42px;line-height:1.1">$293.76</div><div class="card-meta">{{ tx.tipPct }}</div></div>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;gap:var(--space-8) var(--space-6);align-items:flex-start">
+      <div style="flex:3 1 420px;min-width:0;display:flex;flex-direction:column;gap:var(--space-8)">
+        <div class="card blueprint" style="padding:var(--space-4);gap:var(--space-3)">
+          <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+          <div style="display:flex;align-items:baseline;gap:var(--space-2)"><span class="card-title">{{ tx.byQuarter }}</span><span class="text-muted" style="font-size:12px">{{ tx.seated96 }}</span></div>
+          <div style="display:flex;align-items:flex-end;gap:var(--space-2);height:180px;border-bottom:1px solid var(--color-divider)">
+            <sc-for list="{{ bars }}" as="b" hint-placeholder-count="11"><div title="{{ b.tip }}" style="flex:1;height:{{ b.h }};background:var(--color-text)"></div></sc-for>
+          </div>
+          <div style="display:flex;gap:var(--space-2);font-size:11px" class="text-muted">
+            <sc-for list="{{ bars }}" as="b" hint-placeholder-count="11"><span style="flex:1;text-align:center;overflow:hidden">{{ b.label }}</span></sc-for>
+          </div>
+        </div>
+        <div class="card blueprint" style="padding:var(--space-4);gap:var(--space-2)">
+          <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+          <div style="display:flex;align-items:baseline;gap:var(--space-2)"><span class="card-title">{{ tx.bestSellers }}</span><span class="text-muted" style="font-size:12px">{{ tx.portionsService }}</span></div>
+          <sc-for list="{{ sellers }}" as="s" hint-placeholder-count="6">
+            <div style="display:grid;grid-template-columns:130px 1fr 28px;align-items:center;gap:var(--space-3);font-size:13px">
+              <span>{{ s.name }}</span>
+              <div style="height:6px;border:1px solid var(--color-divider)"><div style="height:100%;width:{{ s.pct }};background:var(--color-text)"></div></div>
+              <span style="text-align:right;font-family:var(--font-heading);font-weight:600;font-size:16px">{{ s.n }}</span>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+      <div style="flex:1 1 280px;max-width:360px;border:var(--space-4) solid var(--color-neutral-900);background:var(--color-neutral-100);color:var(--color-neutral-900);padding:var(--space-6) var(--space-4);font:12px/1.5 ui-monospace,Menlo,monospace;box-shadow:var(--shadow-lg)">
+        <div style="text-align:center;font-weight:700;letter-spacing:.14em">KITCHENLINE · {{ locationUpper }}</div>
+        <div style="text-align:center;letter-spacing:.08em">{{ tx.closeOut }}</div>
+        <div style="text-align:center;letter-spacing:.08em;padding-bottom:var(--space-3)">{{ serviceUpper }} · {{ tx.date }}</div>
+        <sc-for list="{{ receipt }}" as="sec" hint-placeholder-count="4">
+          <div style="border-top:1px dashed currentColor;padding:var(--space-3) 0;display:flex;flex-direction:column">
+            <sc-for list="{{ sec.rows }}" as="r" hint-placeholder-count="3">
+              <div style="display:flex;justify-content:space-between;gap:var(--space-3);font-weight:{{ r.weight }};padding-left:{{ r.indent }}"><span>{{ r.l }}</span><span>{{ r.v }}</span></div>
+            </sc-for>
+          </div>
+        </sc-for>
+        <div style="border-top:1px dashed currentColor;padding-top:var(--space-3);text-align:center;letter-spacing:.08em">{{ tx.reportLine }}</div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<nav data-field="" style="position:sticky;bottom:0;z-index:5;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1px solid var(--color-divider)">
+  <sc-for list="{{ tabs }}" as="t" hint-placeholder-count="4">
+    <button type="button" onClick="{{ t.go }}" aria-pressed="{{ t.active }}" style="display:flex;align-items:center;gap:var(--space-3);min-height:60px;padding:var(--space-2) var(--space-4);border:0;border-right:1px solid var(--color-divider);border-radius:0;cursor:pointer;text-align:left;background:{{ t.bg }};color:{{ t.fg }}" style-hover="filter:brightness(1.12)">
+      <span style="font-size:10px;letter-spacing:.12em">{{ t.num }}</span>
+      <span style="font-family:var(--font-heading);font-weight:600;font-size:20px;line-height:1.1">{{ t.label }}</span>
+      <span class="tag tag-accent" style="display:{{ t.badgeDisplay }};gap:4px"><span>{{ t.badge }}</span><span>{{ tx.late }}</span></span>
+    </button>
+  </sc-for>
+</nav>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;lateAfterMin&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:12,&quot;min&quot;:5,&quot;max&quot;:20,&quot;step&quot;:1,&quot;unit&quot;:&quot;min&quot;,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Pass&quot;},&quot;paperTickets&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Pass&quot;},&quot;showSeats&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Floor&quot;}}">
+const STATIONS = ['Grill', 'Sauté', 'Cold', 'Pastry'];
+const T0 = Date.now();
+const mk = (table, covers, course, station, items, age) => ({ id: table + '-' + course, table, covers, course, station, items, start: T0 - age * 1000 });
+const TICKETS = [
+  mk('T12', 4, 'Mains', 'Grill', ['2 Hanger steak', '1 Lamb kofta', '1 Chicken thigh'], 48),
+  mk('T16', 2, 'Mains', 'Grill', ['2 Whole trout'], 190),
+  mk('T1', 1, 'Mains', 'Grill', ['1 Chicken thigh', '  no chili'], 305),
+  mk('T10', 4, 'Mains', 'Grill', ['2 Hanger steak', '2 Lamb kofta'], 512),
+  mk('T11', 6, 'Mains', 'Sauté', ['3 Gnocchi', '2 Short rib', '1 Cauliflower'], 240),
+  mk('T8', 4, 'Mains', 'Sauté', ['2 Short rib', '2 Gnocchi'], 435),
+  mk('T9', 3, 'Mains', 'Sauté', ['1 Short rib', '1 Gnocchi', '1 Cauliflower'], 758),
+  mk('T14', 2, 'Starters', 'Cold', ['1 Tuna crudo', '1 Burrata'], 255),
+  mk('T5', 2, 'Starters', 'Cold', ['1 Burrata', '1 Carrots'], 640),
+  mk('T3', 2, 'Dessert', 'Pastry', ['1 Olive oil cake', '1 Lemon posset'], 905)
+];
+const QUEUE = [
+  { table: 'T15', covers: 4, course: 'Starters', station: 'Cold', items: ['2 Tuna crudo', '1 Burrata', '1 Carrots'], note: 'allergy: sesame' },
+  { table: 'T4', covers: 2, course: 'Dessert', station: 'Pastry', items: ['1 Chocolate tart', '1 Baked figs'] },
+  { table: 'T2', covers: 2, course: 'Mains', station: 'Sauté', items: ['1 Gnocchi', '1 Short rib'] },
+  { table: 'T7', covers: 2, course: 'Mains', station: 'Grill', items: ['1 Hanger steak', '1 Whole trout'] }
+];
+const tb = (id, seats, x, y, w, h, status, covers, course, check, round) => ({ id, seats, x, y, w, h, status, covers, course, check, round });
+const TABLES = [
+  tb('T1', 2, 5, 9, 8, 10, 'Eating', 1, 'Mains', '$22.00'), tb('T2', 2, 5, 23, 8, 10, 'Eating', 2, 'Starter', '$29.00'),
+  tb('T3', 2, 5, 37, 8, 10, 'Late', 2, 'Dessert', '$74.50'), tb('T4', 2, 5, 51, 8, 10, 'Eating', 2, 'Mains', '$61.00'),
+  tb('T5', 2, 5, 65, 8, 10, 'Eating', 2, 'Starter', '$27.00'), tb('T6', 2, 5, 79, 8, 10, 'Free', 0, '', '—'),
+  tb('T7', 4, 24, 14, 12, 13, 'Free', 0, '', '—'), tb('T8', 4, 45, 14, 12, 13, 'Eating', 4, 'Mains', '$104.00'),
+  tb('T9', 4, 24, 41, 12, 13, 'Late', 3, 'Mains', '$73.00'), tb('T10', 4, 45, 41, 12, 13, 'Eating', 4, 'Mains', '$98.00'),
+  tb('T12', 4, 24, 68, 12, 13, 'Eating', 4, 'Mains', '$88.00'), tb('T11', 6, 45, 66, 11, 17.6, 'Eating', 6, 'Mains', '$152.50', true),
+  tb('T14', 2, 63, 78, 8, 10, 'Eating', 2, 'Starter', '$31.00'), tb('T15', 4, 74, 78, 10, 10, 'Bill', 4, 'Paid', '$171.00'),
+  tb('T16', 2, 87, 78, 8, 10, 'Eating', 2, 'Mains', '$52.00')
+];
+const BOOKINGS = [
+  { time: '13:40', name: 'Abara', party: 2, table: 'T6' }, { time: '13:55', name: 'Walk-in', party: 2, table: '—' },
+  { time: '14:05', name: 'Lindgren', party: 3, table: 'T7' }, { time: '14:20', name: 'Castillo', party: 2, table: 'T15' }
+];
+const mi = (group, name, station, price, left, made) => ({ group, name, station, price, left, made, off: left === 0 });
+const MENU = [
+  mi('Mains', 'Hanger steak', 'Grill', 27, 9, 28), mi('Mains', 'Whole trout', 'Grill', 25, 0, 11), mi('Mains', 'Chicken thigh', 'Grill', 20, 7, 16),
+  mi('Mains', 'Lamb kofta', 'Grill', 22, 2, 12), mi('Mains', 'Braised short rib', 'Sauté', 28, 5, 14), mi('Mains', 'Ricotta gnocchi', 'Sauté', 19, 6, 21), mi('Mains', 'Roast cauliflower', 'Sauté', 17, 8, 12),
+  mi('Starters', 'Charred carrots', 'Cold', 9, 6, 13), mi('Starters', 'Burrata & peach', 'Cold', 13, 3, 19), mi('Starters', 'Tuna crudo', 'Cold', 15, 0, 9),
+  mi('Starters', 'Lentil soup', 'Sauté', 8, 10, 16), mi('Starters', 'Fried artichokes', 'Sauté', 11, 5, 12),
+  mi('Dessert', 'Olive oil cake', 'Pastry', 9, 2, 15), mi('Dessert', 'Lemon posset', 'Pastry', 8, 7, 12), mi('Dessert', 'Chocolate tart', 'Pastry', 10, 4, 10),
+  mi('Dessert', 'Baked figs', 'Pastry', 9, 6, 9), mi('Dessert', 'Cheese board', 'Cold', 14, 4, 7)
+];
+const QUARTERS = [4, 9, 12, 14, 12, 13, 10, 8, 6, 5, 3];
+const SELLERS = [['Hanger steak', 19], ['Burrata & peach', 16], ['Ricotta gnocchi', 15], ['Olive oil cake', 13], ['Whole trout', 11], ['Lamb kofta', 10]];
+const RECEIPT = [
+  [['Covers', '96'], ['Checks', '41'], ['Per cover', '$34.00']],
+  [['Gross sales', '$3,264.00', 1], ['Food, soft', '$2,480.60', 0, 1], ['Alcohol', '$783.40', 0, 1], ['Tax', '$241.78'], ['Net sales', '$3,022.22', 1]],
+  [['Card', '$2,711.20'], ['Cash', '$318.30'], ['Vouchers', '$234.50'], ['Tips', '$293.76']],
+  [['Comps (1)', '−$24.00'], ['Voids (2)', '−$19.50']]
+];
+const L = {"en":{"onPass":"On the pass","avgTicket":"Average ticket time","fireNext":"Fire next","noQueue":"Nothing waiting to fire.","stations":"Stations","bump":"Bump","refire":"Refire","railClear":"The rail is clear.","fire":"Fire","late":"late","lateUpper":"LATE","lateOldest":"late · oldest","doneTarget":"done · target","coversSoFar":"Covers so far","kitchen":"KITCHEN","bar":"BAR","entrance":"ENTRANCE","coversSeated":"Covers seated","tablesInUse":"Tables in use","avgTurn":"Average turn","covers":"Covers","course":"Course","check":"Check","stillToCome":"Still to come","seat":"Seat","onMenu":"On the menu","of":"of","dishes":"dishes","eightySixed":"86'd","runningLow":"Running low","portionsLeft":"portions left","grossSales":"Gross sales","perCover":"Per cover","tips":"Tips","checks41":"41 checks","netLine":"net $3,022.22 after tax","perCheck":"$79.61 per check","tipPct":"9.0% of gross","byQuarter":"Covers by quarter hour","seated96":"96 seated","bestSellers":"Best sellers","portionsService":"portions this service","closeOut":"SERVICE CLOSE-OUT","reportLine":"REPORT 0092 · TOTALS CLEARED","lunch":"Lunch","dinner":"Dinner","booked":"booked","cov":"cov","waiting":"waiting","oldestVs":"oldest ticket vs","coversLower":"covers","table":"Table","seats":"seats","sold":"sold","date":"WED 11 NOV","onAvg":" on · avg ","on":"On","nothingOff":"Nothing off","allStocked":"All stocked"},"es":{"onPass":"En el pase","avgTicket":"Tiempo medio por comanda","fireNext":"Próximas a marchar","noQueue":"Nada pendiente de marchar.","stations":"Partidas","bump":"Servido","refire":"Remarchar","railClear":"El riel está vacío.","fire":"Marchar","late":"tarde","lateUpper":"TARDE","lateOldest":"tarde · más antigua","doneTarget":"hechas · objetivo","coversSoFar":"Cubiertos hasta ahora","kitchen":"COCINA","bar":"BARRA","entrance":"ENTRADA","coversSeated":"Cubiertos sentados","tablesInUse":"Mesas ocupadas","avgTurn":"Rotación media","covers":"Cubiertos","course":"Plato","check":"Cuenta","stillToCome":"Por llegar","seat":"Sentar","onMenu":"En carta","of":"de","dishes":"platos","eightySixed":"Agotados","runningLow":"Quedan pocos","portionsLeft":"raciones restantes","grossSales":"Ventas brutas","perCover":"Por cubierto","tips":"Propinas","checks41":"41 cuentas","netLine":"neto $3,022.22 tras impuestos","perCheck":"$79.61 por cuenta","tipPct":"9.0% del bruto","byQuarter":"Cubiertos por cuarto de hora","seated96":"96 sentados","bestSellers":"Más vendidos","portionsService":"raciones en este servicio","closeOut":"CIERRE DE SERVICIO","reportLine":"INFORME 0092 · TOTALES A CERO","lunch":"Comida","dinner":"Cena","booked":"reservas","cov":"cub","waiting":"en espera","oldestVs":"comanda más antigua vs","coversLower":"cubiertos","table":"Mesa","seats":"plazas","sold":"vendidos","date":"MIÉ 11 NOV","onAvg":" en curso · media ","on":"Alta","nothingOff":"Nada agotado","allStocked":"Todo disponible"}};
+const ES = {"Grill":"Parrilla","Sauté":"Salteado","Cold":"Frío","Pastry":"Pastelería","Mains":"Principales","Starters":"Entrantes","Starter":"Entrante","Dessert":"Postre","Seated":"Sentados","Bill":"Cuenta","Paid":"Pagado","All":"Todas","Eating":"Comiendo","Free":"Libre","Late":"Tarde","Seat party":"Sentar grupo","Print bill":"Imprimir cuenta","Clear table":"Liberar mesa","Pass":"Pase","Floor":"Sala","Menu":"Carta","Sales":"Ventas","Lunch":"Comida","Dinner":"Cena","Walk-in":"Sin reserva","allergy: sesame":"alergia: sésamo","no chili":"sin chile","Hanger steak":"Entraña","Lamb kofta":"Kofta de cordero","Chicken thigh":"Muslo de pollo","Whole trout":"Trucha entera","Gnocchi":"Ñoquis","Short rib":"Costilla","Cauliflower":"Coliflor","Tuna crudo":"Crudo de atún","Carrots":"Zanahorias","Olive oil cake":"Bizcocho de aceite","Lemon posset":"Posset de limón","Chocolate tart":"Tarta de chocolate","Baked figs":"Higos asados","Braised short rib":"Costilla braseada","Ricotta gnocchi":"Ñoquis de ricotta","Roast cauliflower":"Coliflor asada","Charred carrots":"Zanahorias a la brasa","Burrata & peach":"Burrata y melocotón","Lentil soup":"Sopa de lentejas","Fried artichokes":"Alcachofas fritas","Cheese board":"Tabla de quesos","Covers":"Cubiertos","Checks":"Cuentas","Per cover":"Por cubierto","Gross sales":"Ventas brutas","Food, soft":"Comida, refrescos","Tax":"Impuestos","Net sales":"Ventas netas","Card":"Tarjeta","Cash":"Efectivo","Vouchers":"Vales","Tips":"Propinas","Comps (1)":"Invitaciones (1)","Voids (2)":"Anulaciones (2)"};
+const SUB_ES = { Mains: 'Princ.', Starter: 'Entr.', Seated: 'Sent.' };
+const fmt = s => Math.floor(s / 60) + ':' + String(Math.floor(s % 60)).padStart(2, '0');
+const TTAG = { Eating: 'tag-neutral', Late: 'tag-accent', Bill: 'tag-accent', Free: 'tag-neutral' };
+
+class Component extends DCLogic {
+  state = { lang: 'en', tab: 'pass', service: 'Lunch', location: 'Downtown', now: Date.now(), tickets: TICKETS, queue: QUEUE, done: 22, selK: 'T9-Mains', tables: TABLES, selT: 'T7', filter: 'All', bookings: BOOKINGS, menu: MENU };
+  componentDidMount() { this._t = setInterval(() => this.setState({ now: Date.now() }), 1000); }
+  componentWillUnmount() { clearInterval(this._t); }
+
+  fire(q) {
+    const id = q.table + '-' + q.course + '-' + Date.now();
+    this.setState(s => ({ queue: s.queue.filter(x => x.table !== q.table), tickets: [...s.tickets, { id, table: q.table, covers: q.covers, course: q.course, station: q.station, items: q.items, start: Date.now() }], selK: id, now: Date.now() }));
+  }
+  pips(t, show) {
+    if (!show) return [];
+    const bg = t.status === 'Free' ? 'transparent' : 'var(--color-neutral-100)', out = [];
+    if (t.seats === 2) return [{ l: '-9px', t: '50%', bg }, { l: 'calc(100% + 9px)', t: '50%', bg }];
+    const k = t.seats / 2;
+    for (let i = 0; i < k; i++) { const l = ((i + 0.5) / k * 100) + '%'; out.push({ l, t: '-9px', bg }, { l, t: 'calc(100% + 9px)', bg }); }
+    return out;
+  }
+
+  renderVals() {
+    const st = this.state, P = this.props, now = st.now, tab = st.tab;
+    const target = (P.lateAfterMin ?? 12) * 60, paper = P.paperTickets ?? true, showSeats = P.showSeats ?? true;
+    const on = (id, d) => tab === id ? (d || 'flex') : 'none';
+    const es = st.lang === 'es', tx = L[st.lang], tr = s => es ? (ES[s] || s) : s;
+    const trItem = s => es ? s.replace(/^(\s*\d+ )?(.*)$/, (m, n, name) => (n || '') + (ES[name.trim()] ? (name.startsWith(' ') ? '  ' : '') + ES[name.trim()] : name)) : s;
+
+    const view = (k, i) => {
+      const age = Math.max(0, (now - k.start) / 1000), late = age > target;
+      const fg = paper ? 'var(--color-neutral-900)' : 'var(--color-text)';
+      return { ...k, course: tr(k.course), stationL: tr(k.station), items: k.items.map(trItem), age, late, timer: fmt(age), lateDisplay: late ? 'inline' : 'none',
+        bg: paper ? 'var(--color-neutral-100)' : 'transparent', fg, border: paper ? '0' : '1px solid var(--color-divider)',
+        timerBg: late ? 'var(--color-accent)' : 'transparent', timerFg: late ? 'var(--color-neutral-100)' : 'inherit',
+        outline: k.id === st.selK ? '2px solid var(--color-accent)' : 'none',
+        rot: 'rotate(' + (((k.table.charCodeAt(k.table.length - 1) + i) % 5) - 2) * 0.5 + 'deg)',
+        anim: age < 1 ? 'kl-drop .5s ease-out' : 'none', select: () => this.setState({ selK: k.id }) };
+    };
+    const all = st.tickets.map(view);
+    const zones = STATIONS.map(name => {
+      const ts = all.filter(k => k.station === name).sort((a, b) => b.age - a.age), oldest = Math.max(0, ...ts.map(k => k.age)), lateCount = ts.filter(k => k.late).length;
+      const avg = ts.length ? ts.reduce((a, k) => a + k.age, 0) / ts.length : 0;
+      return { name: tr(name), tickets: ts, on: ts.length, flex: Math.max(1, ts.length) + ' 1 auto', minW: Math.max(170, ts.length * 112 + (ts.length - 1) * 14 + 14) + 'px', meta: ts.length + tx.onAvg + fmt(avg), lateCount, lateDisplay: lateCount ? 'inline-flex' : 'none',
+        oldest: ts.length ? fmt(oldest) : '—', loadPct: Math.min(100, oldest / target * 100) + '%', barBg: lateCount ? 'var(--color-accent)' : 'var(--color-text)' };
+    });
+    const lateTotal = all.filter(k => k.late).length, oldestAll = Math.max(0, ...all.map(k => k.age));
+    const selK = all.find(k => k.id === st.selK) || [...all].sort((a, b) => b.age - a.age)[0];
+
+    const filtered = t => st.filter === 'All' || t.status === st.filter;
+    const tables = st.tables.map(t => {
+      const s = t.status, fill = s === 'Eating' || s === 'Late';
+      return { ...t, num: t.id.slice(1), l: t.x + '%', t: t.y + '%', w: t.w + '%', h: t.h + '%', radius: t.round ? '50%' : '0',
+        bg: fill ? 'var(--color-neutral-100)' : s === 'Bill' ? 'var(--color-accent)' : 'transparent',
+        fg: fill ? 'var(--color-neutral-900)' : 'var(--color-neutral-100)',
+        border: s === 'Free' ? '1px dashed var(--color-neutral-100)' : '1px solid transparent', ring: s === 'Late' ? '0 0 0 2px var(--color-neutral-900), 0 0 0 5px var(--color-accent)' : 'none', subDisplay: t.seats === 2 ? 'none' : 'block',
+        opacity: filtered(t) ? 1 : 0.18, outline: t.id === st.selT ? '2px solid var(--color-accent)' : 'none',
+        sub: (v => es && SUB_ES[v] || tr(v))(s === 'Late' ? 'Late' : s === 'Free' ? 'Free' : t.course), seatPips: this.pips(t, showSeats), select: () => this.setState({ selT: t.id }) };
+    });
+    const sT = st.tables.find(t => t.id === st.selT);
+    const cnt = s => st.tables.filter(t => t.status === s).length;
+    const setTable = (id, patch, extra) => this.setState(s => ({ tables: s.tables.map(t => t.id === id ? { ...t, ...patch } : t), ...(extra ? extra(s) : {}) }));
+    const next = { Free: ['Seat party', { status: 'Eating', covers: sT.seats, course: 'Seated', check: '$0.00' }], Eating: ['Print bill', { status: 'Bill', course: 'Bill' }], Late: ['Print bill', { status: 'Bill', course: 'Bill' }], Bill: ['Clear table', { status: 'Free', covers: 0, course: '', check: '—' }] }[sT.status];
+
+    const menu = st.menu.map(m => {
+      const off = m.off || m.left === 0, upd = patch => this.setState(s => ({ menu: s.menu.map(x => x.name === m.name ? { ...x, ...patch(x) } : x) }));
+      return { ...m, off, low: !off && m.left <= 3, label: tr(m.name), meta: tr(m.station) + ' · $' + m.price.toFixed(2), dim: off ? 0.5 : 1, deco: off ? 'line-through' : 'none',
+        numDisplay: off ? 'none' : 'inline', offDisplay: off ? 'inline-flex' : 'none', sold: (m.made - m.left) + '/' + m.made, pct: ((m.made - m.left) / m.made * 100) + '%',
+        toggleLabel: off ? tx.on : '86', sell: () => upd(x => ({ left: Math.max(0, x.left - 1), off: x.left - 1 <= 0 })),
+        toggle: () => upd(x => (off ? { off: false, left: Math.max(1, x.left) } : { off: true })) };
+    });
+    const offItems = menu.filter(m => m.off), lowItems = menu.filter(m => m.low);
+    const maxQ = Math.max(...QUARTERS), d = new Date(now);
+
+    return {
+      tx, isEn: !es, isEs: es, setEn: () => this.setState({ lang: 'en' }), setEs: () => this.setState({ lang: 'es' }),
+      location: st.location, setLocation: e => this.setState({ location: e.target.value }), locationUpper: st.location.toUpperCase(),
+      isLunch: st.service === 'Lunch', isDinner: st.service === 'Dinner', serviceUpper: tr(st.service).toUpperCase(),
+      setLunch: () => this.setState({ service: 'Lunch' }), setDinner: () => this.setState({ service: 'Dinner' }),
+      coversSoFar: 80 + st.done - 22, clock: String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0'),
+      dPass: on('pass'), dFloor: on('floor'), dMenu: on('menu'), dSales: on('sales'),
+      tabs: [['pass', 'Pass'], ['floor', 'Floor'], ['menu', 'Menu'], ['sales', 'Sales']].map(([id, label], i) => ({
+        label: tr(label), num: '0' + (i + 1), active: tab === id, bg: tab === id ? 'var(--color-accent)' : 'transparent', fg: 'var(--color-neutral-100)',
+        badge: lateTotal, badgeDisplay: id === 'pass' && lateTotal ? 'inline-flex' : 'none', go: () => this.setState({ tab: id }) })),
+
+      zones, onPass: all.length, lateTotal, oldest: all.length ? fmt(oldestAll) : '—', done: st.done, targetLabel: fmt(target),
+      avgAll: all.length ? fmt(all.reduce((a, k) => a + k.age, 0) / all.length) : '—',
+      queue: st.queue.map(q => ({ ...q, head: tr(q.course) + ' · ' + q.covers + ' ' + tx.coversLower + ' · ' + tr(q.station) + (q.note ? ' · ' + tr(q.note) : ''), line: q.items.map(trItem).join(', '), fire: () => this.fire(q) })),
+      queueCount: st.queue.length, queueEmpty: st.queue.length === 0,
+      hasSel: !!selK, noSel: !selK, selK: selK || {},
+      bump: () => selK && this.setState(s => ({ tickets: s.tickets.filter(k => k.id !== selK.id), done: s.done + 1, selK: null })),
+      refire: () => selK && this.setState(s => ({ tickets: s.tickets.map(k => k.id === selK.id ? { ...k, start: Date.now() } : k), now: Date.now() })),
+
+      tables, filters: ['All', 'Eating', 'Bill', 'Free', 'Late'].map(f => ({ label: tr(f), count: f === 'All' ? st.tables.length : cnt(f),
+        bg: st.filter === f ? 'var(--color-text)' : 'transparent', fg: st.filter === f ? 'var(--color-bg)' : 'var(--color-text)', set: () => this.setState({ filter: f }) })),
+      coversSeated: st.tables.reduce((a, t) => a + t.covers, 0), inUse: st.tables.length - cnt('Free'),
+      selT: { ...sT, num: sT.id.slice(1), tagClass: TTAG[sT.status], coversLabel: sT.covers || '—', courseLabel: tr(sT.course) || '—', action: tr(next[0]), status: tr(sT.status) },
+      advanceTable: () => setTable(sT.id, next[1]),
+      bookings: st.bookings.map(b => ({ ...b, name: tr(b.name), seat: () => {
+        const id = b.table !== '—' ? b.table : (st.tables.find(t => t.status === 'Free') || {}).id; if (!id) return;
+        setTable(id, { status: 'Eating', covers: b.party, course: 'Seated', check: '$0.00' }, s => ({ bookings: s.bookings.filter(x => x.time !== b.time), selT: id }));
+      } })),
+      bookingCovers: st.bookings.reduce((a, b) => a + b.party, 0),
+
+      menuGroups: ['Mains', 'Starters', 'Dessert'].map(name => { const items = menu.filter(m => m.group === name); return { name: es && name === 'Dessert' ? 'Postres' : tr(name), items, left: items.reduce((a, m) => a + (m.off ? 0 : m.left), 0) }; }),
+      menuOn: menu.length - offItems.length, menuTotal: menu.length, menuOff: offItems.length, menuOffNames: offItems.map(m => m.label).join(', ') || tx.nothingOff,
+      menuLow: lowItems.length, menuLowNames: lowItems.map(m => m.label).join(', ') || tx.allStocked,
+
+      bars: QUARTERS.map((v, i) => { const m = i * 15, label = (12 + Math.floor(m / 60)) + ':' + String(m % 60).padStart(2, '0'); return { h: (v / maxQ * 100) + '%', label: i % 2 ? '' : label, tip: label + ' · ' + v + ' ' + tx.coversLower }; }),
+      sellers: SELLERS.map(([name, n]) => ({ name: tr(name), n, pct: (n / SELLERS[0][1] * 100) + '%' })),
+      receipt: RECEIPT.map(rows => ({ rows: rows.map(([l, v, bold, sub]) => ({ l: tr(l), v, weight: bold ? 700 : 400, indent: sub ? '12px' : '0' })) }))
+    };
+  }
+}
+</script>
+</body>
+</html>
